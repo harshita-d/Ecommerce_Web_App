@@ -94,8 +94,8 @@ ROOT_URLCONF = "app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
+        "DIRS": [BASE_DIR / "templates"],  # Global templates directory
+        "APP_DIRS": True,  # Enable searching in app-specific `templates/`
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -106,6 +106,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "app.wsgi.application"
 
