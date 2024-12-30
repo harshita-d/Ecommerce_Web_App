@@ -7,9 +7,6 @@ from rest_framework.settings import api_settings
 from django.shortcuts import render
 
 
-from django.shortcuts import render
-from rest_framework.routers import DefaultRouter
-
 def api_endpoints(request):
     # Example of dynamically fetching registered endpoints
     from django.urls import get_resolver
@@ -17,10 +14,10 @@ def api_endpoints(request):
     resolver = get_resolver()
     endpoints = {}
     for pattern in resolver.url_patterns:
-        if hasattr(pattern, 'pattern') and hasattr(pattern, 'lookup_str'):
+        if hasattr(pattern, "pattern") and hasattr(pattern, "lookup_str"):
             endpoints[f"http://localhost:8000/{pattern.pattern}"] = pattern.lookup_str
 
-    return render(request, 'home.html', {'endpoints': endpoints})
+    return render(request, "home.html", {"endpoints": endpoints})
 
 
 class CreateUserView(generics.CreateAPIView):
