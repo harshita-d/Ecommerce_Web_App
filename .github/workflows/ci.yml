@@ -15,34 +15,30 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set Up Docker
-      - name: Set Up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io docker-compose
-
-      # Step 3: Login to Docker Hub (Optional)
+      # Step 2: Login to Docker Hub (Optional)
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USER}}
-          password: ${{ secrets.DOCKERHUB_TOKEN}}
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Test
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 3: Run Tests
+      - name: Run Tests
         run: docker compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
-      - name: Lint
+
+      # Step 4: Run Linter (Flake8)
+      - name: Run Linter
         run: docker compose run --rm app sh -c "flake8"
 
-      # Step 4: Build Docker Image
+      # Step 5: Build Docker Image
       - name: Build Docker Image
         run: docker build -t ${{ secrets.DOCKERHUB_USER }}/django_app:latest .
 
-      # Step 5: Push Docker Image to Docker Hub (Optional)
+      # Step 6: Push Docker Image to Docker Hub (Optional)
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USER }}/django_app:latest
 
-      # Step 6: Deploy to EC2
+      # Step 7: Deploy to EC2
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -50,12 +46,19 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.RECIPE_HUB_KEY_AWS }}
           script: |
-            # Update System and Install Docker on EC2
-            sudo apt-get update
-            sudo apt-get install -y docker.io docker-compose
+            # Update System
+            sudo apt-get update -y
+            sudo apt-get upgrade -y
 
-            # Stop and Remove Existing Containers (if any)
+            # Install Docker Using Official Script
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sudo sh get-docker.sh
+
+            # Stop and Remove Existing Containers
             docker compose -f /home/ubuntu/docker-compose.yml down || true
 
-            # Start the Application with Docker Compose
+            # Pull Latest Docker Image
+            docker pull ${{ secrets.DOCKERHUB_USER }}/django_app:latest
+
+            # Start Application
             docker compose -f /home/ubuntu/docker-compose.yml up -d --build
