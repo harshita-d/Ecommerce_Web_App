@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        python django/app/manage.py test
+        python django/app/manage.py
