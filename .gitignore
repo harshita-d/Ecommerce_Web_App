@@ -129,4 +129,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-recipe-key.pem
+recipe-hub-key.pem
