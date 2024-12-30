@@ -62,6 +62,33 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+""" # Determine the environment
+DJANGO_ENV = os.getenv("DJANGO_ENV", "production")
+
+# CORS Configuration
+if DJANGO_ENV == "development":
+    # Development-specific CORS settings
+    INSTALLED_APPS += ["corsheaders"]
+    MIDDLEWARE.insert(
+        0, "corsheaders.middleware.CorsMiddleware"
+    )  # Add CORS middleware at the top
+
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",  # React app in development
+    ]
+    CORS_ALLOW_CREDENTIALS = True
+else:
+    # Production-specific CORS settings (if needed)
+    CORS_ALLOWED_ORIGINS = []  # Adjust based on production setup
+
+# General configurations for both environments
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+]
+"""
+
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
@@ -87,12 +114,12 @@ WSGI_APPLICATION = "app.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ.get("DB_HOST"),
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASS"),
     }
 }
 
