@@ -48,10 +48,6 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y docker.io docker-compose
 
-            # Pull the Latest Docker Image
-            docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker pull ${{ secrets.DOCKERHUB_USER }}/django_app:latest
-
             # Stop and Remove Existing Containers (if any)
             docker compose -f /home/ubuntu/docker-compose.yml down || true
 
