@@ -5,6 +5,7 @@ Create Custom USer Model with email
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
 
 
 class User(AbstractUser):
@@ -47,7 +48,7 @@ class Profile(models.Model):
     pid = models.UUIDField(
         unique=True,
         max_length=20,
-        default=uuid.uuid4, # auto-generate a new UUID4
+        default=uuid.uuid4,  # auto-generate a new UUID4
     )  # unique
 
     def __str__(self):
