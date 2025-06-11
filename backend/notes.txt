@@ -1,0 +1,34 @@
+1. Classes and object for models
+    ```
+    class User(AbstractUser):
+        pass
+    ```
+
+    - class User(...) declares a new class named User.
+    - The parentheses (AbstractUser) indicate inheritance—that User will acquire everything from its parent, then extend or override it.
+    - Under the hood, Python calls User.__new__(), then User.__init__() (not shown in your snippet) to initialize it.
+    - Class attributes are defined directly in the class body (e.g. username, email). They’re shared by all instances unless overridden.
+    - Instance attributes live on each object—typically set in __init__ or elsewhere (e.g. after you split self.email into email_username).
+    - Why Django has to use class attributes for fields:
+        - Schema discovery – Django’s metaclass scans the class once during import to know your table columns. 
+        - If a field lived only in __init__, Django wouldn’t see it.
+        - Descriptor hooks – EmailField, CharField, etc. implement __get__/__set__; they must sit on the class so every user.email access 
+            is routed through validation, lazy loading, and dirty-tracking code.
+        - Uniform defaults – things like unique=True, max_length=100 are identical for every row, so they belong to the shared definition, not per-row data.
+    -
+
+2. Lifecycle of object creation
+    ```
+    u = User("alice@example.com")   
+    ```
+    - `User.__call__`: It is inherited from type. It acts like a factory
+    - `factory`: This term comes from software design factory pattern. It means a peice of code whose only job is to
+        manufacture a fully formed object and return it back. 
+        - type.__call__: It receive the call `User(...)`, 
+        - which then invokes `User.__new__` to allocate raw memory
+        - invokes `User.__init__` to initialize that memory
+        - return ready to use User object
+    - User.__call__ (inherited from type) is Python’s built-in factory for every class: it hides the messy details of 
+        memory allocation (__new__) and initialization (__init__) so you can simply write User(...) and get a finished instance back.
+
+3. Memory 

@@ -2,7 +2,6 @@
 
 ## User Model
 
-  - 
   - Changing `USERNAME_FIELD` to `email` makes the email address the primary identifier for authentication instead of `username`.
   - `REQUIRED_FIELDS` attribute of a custom user model is a list of field names that are required when creating `superuser`.
   - Django's superuser creation process expects at least one field other than the `USERNAME_FIELD` to be explicitly marked as required. 
@@ -19,4 +18,46 @@
     - if we do not define `__str__` method, django uses default `__repr__` method, which return something not useful.
   - the `save` method is an in built method in models, it allows `overriding` the save method to add `custom` behavior before or after saving the `instance`. 
     - the `super` is used to call the save method of the parent class of the User model. This ensures django's built in behavior for saving a model instance is executed after any custom logic defined in the overridden save method.
+
+- if get `inconsistencyerror` while `migrations` than comment out `'jazzmin','django.contrib.admin'` from setting file and again run the commands and also in urls.py comment `admin.site.url `
+## Memory allocation
+- Module Loading & Class Creation
+  - `Bytecode Compilation`
+    - When Python first imports your .py file, it compiles it to bytecode—this allocates memory for code objects (functions, class definitions, the module body).
+  - `Executing the class Statement`
+    - A new class object of type ModelBase is created on the heap via `type.__call__`.
+    - Memory is allocated for its namespace dictionary `(User.__dict__)`, which holds entries for:
+      - Field descriptors `("username" → <CharField object>)`, 
+      - Methods `("save" → function object)`,
+      - Constants `("USERNAME_FIELD" → "email")`, etc.
+    - At the end of this step, the module’s globals gain a reference to that class object.
+    ```python
+    module globals ──> User (class object)
+                    └─ User.__dict__ ──> {"username": CharField, …}
+    ```
+
+- Instantiating an Object
+  ```python
+  u = User(email="a@b.com", username="alice")
+  ```
+  - Allocate Instance Memory `(__new__)`
+    - `User.__new__` (usually inherited from object) calls into the allocator, carving out a block of memory on the heap sized for a User instance.
+    - This block includes space for:
+      - A pointer to its type object `(User)`,
+      - A pointer to its `instance dictionary` (initially NULL or a pointer to an empty dict),
+      - Any `__slots__` storage if defined.
+  - Initialize the Instance `(__init__)`
+    - Python then calls `User.__init__(self, …)`.
+    - The first time you assign to any attribute on self, Python ensures an empty `self.__dict__` is created (allocating a small hash table).
+    - Each self.attr = value stores entries in that hash table, which may resize (rehash) as it grows.
+    ```python
+    User() ──> allocate instance ──> u
+            └─ u.__dict__ initially empty
+    ```
+    - Setting Attributes
+    ```python
+    u.full_name = "alice"
+    ├─ Descriptor? → CharField.__set__(u, "alice")
+    └─ else → u.__dict__["full_name"] = "alice"
+    ```
 
