@@ -26,3 +26,4 @@ def save_user_profile(sender, instance, **kwargs):
     Ensures the linked Profile is saved whenever the User is saved.
     """
     instance.profile.save()
+

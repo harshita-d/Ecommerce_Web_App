@@ -6,6 +6,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
+from django.db import transaction
 
 
 class User(AbstractUser):
@@ -28,12 +29,12 @@ class User(AbstractUser):
             self.full_name = email_username
         if self.username == "" or self.username == None:
             self.username = email_username
-
-        super().save(*args, **kwargs)
+        with transaction.atomic():
+            super().save(*args, **kwargs)
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.FileField(
         upload_to="image", default="default/default-user.jpg", null=True, blank=True
     )  # optional
