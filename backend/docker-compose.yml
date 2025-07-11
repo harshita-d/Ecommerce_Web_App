@@ -1,0 +1,15 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app/
+    environment:
+      - DEBUG=1
+    ports: 
+    - "8000:8000"
+
+# docker compose build ---> build image
+# docker compose up ---> Bring up your services in the foreground
+# docker-compose down ---> Stop containers
