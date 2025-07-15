@@ -9,6 +9,9 @@
 - Clone Repo
 - docker compose build       # build images
 - docker compose up -d       # start services in detached mode
+- docker compose run --rm app python manage.py makemigrations
+- docker compose run --rm app python manage.py migrate
+- docker compose run --rm app python manage.py createsuperuser
 
 
 ### Create Django project
