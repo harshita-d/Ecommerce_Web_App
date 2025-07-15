@@ -4,20 +4,12 @@
 
 ### Installation
 
-- `Create Virtual Env`
-```
-python3 -m venv venv
-```
+- install Docker Desktop for macos
+- install GIT
+- Clone Repo
+- docker compose build       # build images
+- docker compose up -d       # start services in detached mode
 
-- `Activate Virtual Env`
-```
-source venv/bin/activate
-```
-
-- `Install Django`
-```
-python3 -m pip install django 
-```
 
 ### Create Django project
 
