@@ -32,7 +32,7 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
-    path('api/v1', include('userauths.urls'))
+    path('api/', include('userauths.urls'))
 ]
 
 # below will tell django where to look for media and static files
