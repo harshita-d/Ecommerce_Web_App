@@ -39,7 +39,7 @@ post_save.connect(my_receiver, sender=MyModel)
   - You call User.objects.create_user(...) or user.save() on an unsaved User.
   - Django saves the User to the database.
   - It then emits the post_save signal.
-  - create_user_profile is called with created=True.
+  - p is called with created=True.
   - Inside it, `Profile.objects.create(user=instance)` runs, making a new row in the Profile table linked by the OneToOneField (or ForeignKey) to that User.
 - Subsequent Saves
 

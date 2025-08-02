@@ -11,7 +11,7 @@ from django.db import transaction
 
 class User(AbstractUser):
     username = models.CharField(unique=True, max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, max_length=100)
     full_name = models.CharField(
         max_length=100, blank=True, null=True
     )  # optional field

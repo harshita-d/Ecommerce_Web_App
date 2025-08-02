@@ -6,3 +6,5 @@ djangorestframework-simplejwt==5.2.2
 PyJWT==2.6.0
 pytz==2024.2
 sqlparse==0.5.3
+setuptools
+drf-spectacular
