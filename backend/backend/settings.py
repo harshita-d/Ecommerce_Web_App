@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     # Custom Apps
     'userauths',
+    'vendor',
+    'store'
 ]
 
 MIDDLEWARE = [

@@ -33,3 +33,12 @@
     - Package the app (e.g., using setuptools) and upload it to PyPI 
     - add the app to INSTALLED_APPS in settings.py
     - add it in urls.py
+
+
+## Commands:
+    - ```docker compose exec web python manage.py startapp vendor```
+    - ``` docker compose exec app python manage.py makemigrations ```
+    - ```docker compose exec app python manage.py migrate```
+
+
+

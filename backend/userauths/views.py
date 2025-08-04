@@ -7,27 +7,40 @@ from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiResponse
 
 User = get_user_model()
 
-
+@extend_schema(
+    tags=["Token"],
+    request=MyTokenObtainPairSerializer,
+    responses={
+        201: OpenApiResponse(
+            description=
+            """
+            {
+                "refresh": "<refresh_token>",
+                "access": "<access_token>"
+            }
+            """
+        ),
+        400: OpenApiResponse(
+            description= 
+            """
+            {
+                "detail": "No active account found with the given credentials"
+            }
+            """
+        )
+    },
+    examples=[
+        OpenApiExample(
+            name="Basic Register",
+            value={
+                "email": "<email>",
+                "password": "<password>",
+            },
+            summary="Token retrival api",
+        )
+    ]
+)
 class MyTokenObtainPairView(TokenObtainPairView):
-    """
-    POST request body:
-        {
-            "email": "test@example.com",
-            "password": "yourpass"
-        }
-
-    Successful response:
-        {
-            "refresh": "<refresh_token>",
-            "access": "<access_token>"
-        }
-
-    Error response if credentials are invalid:
-        {
-            "detail": "No active account found with the given credentials"
-        }
-    """
-
     serializer_class = MyTokenObtainPairSerializer
 
 
@@ -72,11 +85,11 @@ class MyTokenObtainPairView(TokenObtainPairView):
         OpenApiExample(
             name="Basic Register",
             value={
-                "full_name": "admin",
-                "email": "admin@example.com",
-                "phone": "9876543210",
-                "password": "StrongPass123",
-                "password2": "StrongPass123"
+                "full_name": "<string>",
+                "email": "<email>",
+                "phone": "<string>",
+                "password": "<password>",
+                "password2": "<password>"
             },
             summary="Register a new user with required fields",
         )
@@ -87,3 +100,5 @@ class RegisterView(CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = (AllowAny, )
     queryset = User.objects.all()
+
+
