@@ -11,7 +11,7 @@ class Vendor(models.Model):
         upload_to="vendor", blank=True, null=True, default="vendor.jpg"
     )
     name = models.CharField(
-        max_length=100, help_text="shop name", null=True, blank=True
+        max_length=100, help_text="shop name", default=""
     )
     description = models.TextField(blank=True, null=True)
     mobile = models.CharField(
@@ -19,7 +19,7 @@ class Vendor(models.Model):
     )
     active = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(unique=True, max_length=500)
+    slug = models.SlugField(unique=True, max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Vendors"
